@@ -24,4 +24,6 @@ jobs:
 
       - name: Run Safety scan
         run: |
+          # Default Safety scan command. You can change manually to stop the PIPELINE on HIGH ALERTS
+          # safety check --file=requirements.txt --full-report --exit-code
           safety check --file=requirements.txt
