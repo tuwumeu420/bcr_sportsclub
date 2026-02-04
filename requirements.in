@@ -1,5 +1,5 @@
 # Sports club (synchronous version)
-
+django==6.0.2
 django-cors-headers
 django-environ
 django-json-widget
