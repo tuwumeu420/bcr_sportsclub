@@ -13,31 +13,36 @@ REQUIRED_HEADERS = {
     "Referrer-Policy": "same-origin",
 }
 
-try:
-    response = requests.get(URL)
-    print(f"Scanning {URL}")
-    print(f"Status: {response.status_code}\n")
 
-    score = 0
-    max_score = len(REQUIRED_HEADERS)
+def main() -> None:
+    try:
+        response = requests.get(URL)
+        print(f"Scanning {URL}")
+        print(f"Status: {response.status_code}\n")
 
-    for header, expected_value in REQUIRED_HEADERS.items():
-        value = response.headers.get(header)
+        score = 0
+        max_score = len(REQUIRED_HEADERS)
 
-        if value:
-            # Check if value roughly matches expectation
-            if expected_value in value:
-                print(f"Found header {header} with value {value}")
-                score += 1
+        for header, expected_value in REQUIRED_HEADERS.items():
+            value = response.headers.get(header)
+
+            if value:
+                if expected_value in value:
+                    print(f"Found header {header} with value {value}")
+                    score += 1
+                else:
+                    print(f"Found header {header} but value differs")
+                    print(f"\tExpected substring: {expected_value}")
+                    print(f"\tActual: {value}")
+                    score += 0.5  # Partial credit
             else:
-                print(f"Found header {header} but value differs")
-                print(f"\tExpected substring: {expected_value}")
-                print(f"\tActual: {value}")
-                score += 0.5  # Partial credit
-        else:
-            print(f"Missing header {header}")
+                print(f"Missing header {header}")
 
-    print(f"\nYour security score: {score}/{max_score}")
+        print(f"\nYour security score: {score}/{max_score}")
 
-except Exception as e:
-    print(f"Error connecting: {e}")
+    except Exception as exc:
+        print(f"Error connecting: {exc}")
+
+
+if __name__ == "__main__":
+    main()
